@@ -44,6 +44,10 @@ func catchCommand(args []string, cfg *config.Config) error {
 		return fmt.Errorf("you must provide a Pokemon")
 	}
 
+	if _, exists := cfg.CaughtPokemon[args[1]]; exists {
+		return fmt.Errorf("you have already caught that Pokemon")
+	}
+
 	fmt.Printf("Throwing a Pokeball at %s...\n", args[1])
 
 	url := fmt.Sprintf("https://pokeapi.co/api/v2/pokemon/%s", args[1])
@@ -53,9 +57,7 @@ func catchCommand(args []string, cfg *config.Config) error {
 		return err
 	}
 	baseExperience := pokemon.BaseExperience
-	randomValue := rand.Intn(baseExperience)
-
-	fmt.Println(randomValue)
+	randomValue := rand.Intn(baseExperience + 1)
 
 	if randomValue < 20 {
 		fmt.Printf("%s was caught!\n", pokemon.Name)
